@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+
+  react-app:
+    image: react-app-production:${ENV} ## dont forget to change it to production or better is to make a new dockerfile.local and docker-compose plocal
+    restart: unless-stopped
+    # build: ./client/
+    stdin_open: true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mern-app
+
+  api-server:
+    image: api-server ## there is no need to make a new image beacause we re going to use the same with # env files
+    restart: unless-stopped
+    env_file: ./server/config/${ENV}.env
+    # build: ./server/
+    ports:
+      - "5000:5000"
+    networks:
+      - mern-app
+    # depends_on:
+    #   - mongo
+
+  # mongo:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     - mern-app
+  #   volumes:
+  #     - mongo-data:/data/db
+
+
+  
+  
+
+networks:
+  mern-app:
+    driver: bridge
+
+# volumes:
+#   mongo-data:
+#     driver: local
+    
+    
